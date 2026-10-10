@@ -1,0 +1,30 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<foreignObject x="0" y="0" width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(4.47px);clip-path:url(#bgblur_0_0_604_clip_path);height:100%;width:100%"></div></foreignObject><g id="2025_ic_linkfile_32" data-figma-bg-blur-radius="8.94479">
+<rect width="40" height="40" rx="10" fill="white"/>
+<rect x="0.227304" y="0.227304" width="39.5454" height="39.5454" rx="9.7727" stroke="#226DF5" stroke-opacity="0.1" stroke-width="0.454608"/>
+<rect x="0.227304" y="0.227304" width="39.5454" height="39.5454" rx="9.7727" stroke="url(#paint0_linear_0_604)" stroke-opacity="0.1" stroke-width="0.454608"/>
+<g id="Union">
+<use xlink:href="#stroke0_0_604" fill="#226DF5"/>
+<use xlink:href="#stroke0_0_604" fill="url(#paint1_linear_0_604)" fill-opacity="0.8"/>
+<use xlink:href="#stroke1_0_604" fill="#226DF5"/>
+<use xlink:href="#stroke1_0_604" fill="url(#paint2_linear_0_604)" fill-opacity="0.8"/>
+</g>
+</g>
+<defs>
+<clipPath id="bgblur_0_0_604_clip_path" transform="translate(0 0)"><rect width="40" height="40" rx="10"/>
+</clipPath><linearGradient id="paint0_linear_0_604" x1="20" y1="-1.91224e-08" x2="20.6422" y2="40.8183" gradientUnits="userSpaceOnUse">
+<stop offset="0.321707" stop-color="#32BAFE"/>
+<stop offset="0.8125" stop-color="#00D7FD"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_604" x1="20" y1="9.99986" x2="20.3211" y2="30.4093" gradientUnits="userSpaceOnUse">
+<stop offset="0.321707" stop-color="#32BAFE"/>
+<stop offset="0.8125" stop-color="#00D7FD"/>
+</linearGradient>
+<linearGradient id="paint2_linear_0_604" x1="20" y1="9.99986" x2="20.3211" y2="30.4093" gradientUnits="userSpaceOnUse">
+<stop offset="0.321707" stop-color="#32BAFE"/>
+<stop offset="0.8125" stop-color="#00D7FD"/>
+</linearGradient>
+<path id="stroke0_0_604" d="M23.4854 18.8422C23.6061 18.9629 23.5934 19.1592 23.4479 19.2483C22.8985 19.5841 21.6002 20.1865 20.5831 19.1694C19.2572 17.8436 17.3328 17.8672 16.0069 19.1931L13.1362 22.0638C11.8106 23.3897 11.8104 25.539 13.1362 26.8648C14.4621 28.1898 16.6115 28.1902 17.9372 26.8648C18.9682 25.8338 19.9357 25.7391 20.8789 26.5454C20.9985 26.6477 20.9978 26.8301 20.8867 26.9417C20.7431 27.0854 20.5369 27.2933 20.313 27.5174L19.4514 28.379C17.2895 30.5407 13.7841 30.5404 11.622 28.379C9.45992 26.2169 9.45908 22.7108 11.621 20.5486L14.4917 17.6779C16.6539 15.5157 19.8215 15.1782 22.3221 17.6789L23.4854 18.8422Z"/>
+<path id="stroke1_0_604" d="M28.378 11.621C30.5401 13.7831 30.5409 17.2892 28.379 19.4514L25.5083 22.3221C23.3461 24.484 20.1784 24.8217 17.6779 22.3211L16.5146 21.1578C16.394 21.0372 16.4069 20.8409 16.5521 20.7517C17.1015 20.4159 18.3998 19.8135 19.4169 20.8306C20.7427 22.1563 22.6682 22.1335 23.9941 20.8079L26.8648 17.9372C28.1904 16.6113 28.1896 14.461 26.8638 13.1352C25.5379 11.8101 23.3885 11.8098 22.0628 13.1352C21.0319 14.166 20.0652 14.2598 19.1221 13.4537C19.0024 13.3512 19.0029 13.1689 19.1142 13.0574C19.2578 12.9136 19.4634 12.7063 19.687 12.4826L20.5486 11.621C22.7105 9.45932 26.2159 9.45965 28.378 11.621Z"/>
+</defs>
+</svg>

@@ -1,0 +1,36 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="2025_ic_file_pdf_32">
+<g id="Rectangle 34625855">
+<g filter="url(#filter0_i_0_4752)">
+<path d="M5.02398 31.9758L27.024 31.7999C28.6714 31.7868 30 30.4475 30 28.8V9.64475C30 8.86033 29.6928 8.1071 29.1441 7.54647L22.6414 0.90172C22.077 0.325035 21.3042 0 20.4973 0H5C3.34315 0 2 1.34315 2 3V28.9759C2 30.6421 3.35781 31.9891 5.02398 31.9758Z" fill="url(#paint0_linear_0_4752)"/>
+<path d="M5.02398 31.9758L27.024 31.7999C28.6714 31.7868 30 30.4475 30 28.8V9.64475C30 8.86033 29.6928 8.1071 29.1441 7.54647L22.6414 0.90172C22.077 0.325035 21.3042 0 20.4973 0H5C3.34315 0 2 1.34315 2 3V28.9759C2 30.6421 3.35781 31.9891 5.02398 31.9758Z" fill="url(#paint1_linear_0_4752)"/>
+</g>
+<path d="M5 0.5H20.4971C21.1694 0.5 21.8139 0.770509 22.2842 1.25098L28.7871 7.89648C29.2441 8.36359 29.4999 8.99108 29.5 9.64453V28.7998C29.5 30.1727 28.3924 31.2888 27.0195 31.2998L5.01953 31.4756C3.63126 31.4864 2.5 30.364 2.5 28.9756V3C2.5 1.70566 3.48361 0.640824 4.74414 0.512695L5 0.5Z" stroke="#EB4749"/>
+<path d="M5 0.5H20.4971C21.1694 0.5 21.8139 0.770509 22.2842 1.25098L28.7871 7.89648C29.2441 8.36359 29.4999 8.99108 29.5 9.64453V28.7998C29.5 30.1727 28.3924 31.2888 27.0195 31.2998L5.01953 31.4756C3.63126 31.4864 2.5 30.364 2.5 28.9756V3C2.5 1.70566 3.48361 0.640824 4.74414 0.512695L5 0.5Z" stroke="white" stroke-opacity="0.8"/>
+</g>
+<g id="Vector">
+<use xlink:href="#stroke0_0_4752" fill="#FF4D4F"/>
+<use xlink:href="#stroke0_0_4752" fill="white" fill-opacity="0.1"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_i_0_4752" x="2" y="0" width="28" height="31.9759" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="0.8"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+<feBlend mode="normal" in2="shape" result="effect1_innerShadow_0_4752"/>
+</filter>
+<linearGradient id="paint0_linear_0_4752" x1="2" y1="0" x2="30.8739" y2="31.191" gradientUnits="userSpaceOnUse">
+<stop stop-color="#EB4749"/>
+<stop offset="1" stop-color="#EB4749"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_4752" x1="29.9998" y1="32" x2="1.12606" y2="0.809012" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0.7"/>
+</linearGradient>
+<path id="stroke0_0_4752" d="M10.5335 24C10.2452 24 9.96417 23.9106 9.69606 23.7363C9.06325 23.3237 8.98832 22.7725 9.00129 22.4806C9.02435 21.907 9.3458 20.9924 11.7977 19.6234C12.2301 17.8761 12.5184 15.6193 12.5545 13.6916C11.2269 12.2705 10.6691 11.1458 10.8521 10.258C10.9156 9.94965 11.1361 9.38655 11.8943 9.08861C12.3613 8.90239 12.8543 9.01412 13.2074 9.38206C13.4078 9.58911 14.0017 10.2058 14.0319 13.0615C15.3783 14.3962 17.3415 15.9038 19.0713 16.9301C19.7285 16.8065 20.3066 16.7439 20.7938 16.7439C22.7383 16.7439 22.9833 17.812 22.9992 18.2723C23.0136 18.74 22.832 19.0365 22.6778 19.2033C22.5135 19.3776 22.2122 19.5847 21.7005 19.5847C21.0417 19.5847 20.0774 19.2331 18.8277 18.5374C17.0186 18.9456 14.8132 19.759 13.0489 20.6691C12.4045 22.9096 11.58 24 10.5335 24ZM13.5908 18.6566L13.5692 18.7371C14.6604 18.247 15.8351 17.8046 16.9566 17.4619L16.8355 17.3934L16.9494 17.3696C15.9332 16.6769 14.9184 15.8918 14.0262 15.1068V15.211L13.9656 15.15C13.882 16.3417 13.7249 17.5677 13.5101 18.6998L13.5908 18.6566Z"/>
+</defs>
+</svg>
