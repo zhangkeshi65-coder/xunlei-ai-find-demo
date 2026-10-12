@@ -42,7 +42,7 @@ export default function AskConversation({question,onRestart,initiallyComplete=fa
   </div>
   </div>
   {resultReady&&<div className="ask-results" data-node-id="37:8381">
-   <div className="ask-best"><h2>最佳匹配</h2><div className="ask-file"><div className="ask-folder"><img src={result.type==='视频'?'./assets/results-folder.svg':'./assets/resource-'+(result.icon||'link')+'.svg'} alt={result.type+"资源"}/></div><div><p>{result.title}</p><div className="ask-meta">{result.tags.map(tag=><span key={tag}>{tag}</span>)}</div></div></div><div className="ask-actions"><button onClick={()=>setDetails(true)}>查看详情</button><button onClick={()=>setPicker(true)}>{saved?'已保存':'保存云盘'}</button></div></div>
+   <div className="ask-best"><h2>最佳匹配</h2><div className="ask-file"><div className="ask-folder"><img src={result.type==='视频'?'./assets/results-folder.svg':'./assets/resource-'+(result.icon||'link')+'.svg'} alt={result.type+"资源"}/></div><div><p>{result.title}</p><div className="ask-meta">{result.tags.map(tag=><span key={tag}>{tag}</span>)}</div></div></div><div className="ask-actions"><button onClick={()=>setDetails(true)}>查看文件</button><button onClick={()=>setPicker(true)}>{saved?'已保存':'保存云盘'}</button></div></div>
    <button className="ask-all" onClick={onShowAll}><span>查看全部12个结果<img src={assets.img2025IcCommonPagerNextNormal48} alt=""/></span><small>已按匹配度排序</small></button>
   </div>}
   </div>
