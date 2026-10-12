@@ -6,10 +6,10 @@ import HistoryPanel,{HISTORY_KEY,HistoryEntry} from './HistoryPanel';
 const assets={"img2025IcCommonHelpNormal48":"./assets/640bc40a-6306-44e7-9fde-092b0453a3b5.svg","img2025IcCommonSearchNormal48":"./assets/bb2cc836-3013-4e13-836a-d0c51dde7fd3.svg","img2025IcCommonBackNormal48":"./assets/d7e21780-a492-42c0-bdf6-229a141fe51e.svg","imgFrame2085662804":"./assets/457ae75d-e46d-45a4-8875-900f1fd28cc3.svg","imgRightSide":"./assets/82bf0733-93bc-42de-9376-50d2c03d088b.svg","imgImage347":"./assets/ddbeb7f3-c3f8-45bf-a1bc-b7d8144a35f7.png","imgImage348":"./assets/08c053ad-74c7-451e-b2cf-a28f05683b04.png","imgImage349":"./assets/83dabaf7-b37f-43f4-b654-122689809fcc.png","imgImage345":"./assets/603fc9b8-fcd7-406d-8941-1cda017a4cae.png","imgMessageVoice":"./assets/bc41cd6e-4194-4256-8e35-8cbab43ddf6f.svg","imgMessageExpression":"./assets/a406d635-e7d4-4b0e-99d3-c40db938581d.svg","imgAddCircle":"./assets/38b402ac-9fe2-4545-ba5b-4a7f3d0f46a4.svg","img04SparkGradient1":"./assets/593f9ab1-5cae-4a79-9a73-95562f25c4b1.svg"};
 const GREETING='想看的、想学的，说一句就能找';
 const choices=[
- {id:'37:7939',image:assets.imgImage347,label:'追剧不等更，找高清全集',query:'帮我找《甄嬛传》高清全集',start:.568,end:.668},
- {id:'37:7943',image:assets.imgImage348,label:'今晚看什么？找部高清电影',query:'找一部高清电影',start:.616,end:.716},
- {id:'37:7947',image:assets.imgImage349,label:'学习少走弯路，找资料和好书',query:'找一套学习资料和电子书',start:.664,end:.764},
- {id:'37:7951',image:assets.imgImage345,label:'想玩的游戏，帮我找一找',query:'找刺客信条游戏',start:.712,end:.812}
+ {id:'37:7939',image:assets.imgImage347,label:'上头好剧，一口气追完',query:'帮我找《甄嬛传》高清全集',start:.568,end:.668},
+ {id:'37:7943',image:assets.imgImage348,label:'今晚开片，只看高分',query:'帮我找一部高分高清电影',start:.616,end:.716},
+ {id:'37:7947',image:assets.imgImage349,label:'学习资料，别让我到处找',query:'找一套学习资料和电子书',start:.664,end:.764},
+ {id:'37:7951',image:assets.imgImage345,label:'想玩很久的游戏，安排',query:'找刺客信条游戏',start:.712,end:.812}
 ];
 export default function FindPage({onBack}:{onBack:()=>void}){
  const root=React.useRef<HTMLDivElement>(null);
