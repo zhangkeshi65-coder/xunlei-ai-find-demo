@@ -1,5 +1,6 @@
 import React from 'react';
 import ResourceList from './ResourceList';
+import FileBrowser from './FileBrowser';
 import FolderPicker from './FolderPicker';
 import {resourceResult} from './resourceResult';
 const resultAssets={"imgArrowChevronRight": "./assets/cb21c4e5-a78d-429d-a91c-f2779e1ccb26.svg", "img2025IcLinkfile32": "./assets/7107dec3-73bf-4ed0-b97c-ef6700dce198.svg"};
@@ -48,7 +49,7 @@ export default function AskConversation({question,onRestart,initiallyComplete=fa
   </div>
   {saved&&<p className="ask-save-notice" role="status">已保存到 {saved}（本地预览）</p>}
   {picker&&<FolderPicker title={result.title} onClose={()=>setPicker(false)} onSaved={path=>{setSaved(path);setPicker(false)}}/>}
-  {details&&<div className="ask-details" role="dialog" aria-label="资源详情"><h2>{result.title}</h2><p>{result.tags.join(" · ")}</p><p>这是设计原稿的结果演示，尚未连接真实资源检索。</p><button onClick={()=>setDetails(false)}>关闭</button><button onClick={onRestart}>重新询问</button></div>}
+  {details&&<FileBrowser question={question} onBack={()=>setDetails(false)}/>}
  </div>
 }
 
