@@ -71,3 +71,5 @@
 .file-browser-selecting .file-browser-copy>div{line-height:16px}.file-browser-selecting .file-browser-copy>div>span+span:before{content:none}.file-meta-divider{width:1px;height:11px;margin:0 2px;flex-shrink:0}
 /* Keep the Find entry hint visible on the home page, without repeated animation. */
 .phone [data-node-id="37:8262"],.phone.find-tab-active [data-node-id="37:8262"]{display:flex;width:76px;animation:none;opacity:1;overflow:visible}.phone [data-node-id="37:8263"]{opacity:1;animation:none}
+/* Keep save available while browsing or selecting files. */
+.file-browser-savebar{position:absolute;left:0;right:0;bottom:24px;height:76px;padding:12px 16px 16px;background:white;border-top:1px solid #f2f3f5;display:flex;align-items:center}.find-screen .file-browser-savebar>button{width:100%;height:48px;border-radius:8px;background:#262a35;color:#fff;font-size:14px;line-height:20px;font-weight:500}.file-browser-savebar>button:disabled{background:#dfe1e6;color:#fff;cursor:default}.file-browser-notice{bottom:110px}

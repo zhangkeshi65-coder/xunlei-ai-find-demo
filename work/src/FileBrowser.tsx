@@ -7,11 +7,11 @@ import selectionAssets from './selectionAssets';
 export default function FileBrowser({question,onBack}:{question:string,onBack:()=>void}){
  const result=resourceResult(question);
  const kind=result.type==='视频'?'视频':result.type==='音频'?'音频':result.type==='文档'?'文档':'文件';
- const[tab,setTab]=React.useState('全部'),[selecting,setSelecting]=React.useState(false),[selected,setSelected]=React.useState<number[]>([]),[saving,setSaving]=React.useState(''),[notice,setNotice]=React.useState('');
+ const[tab,setTab]=React.useState('全部'),[selecting,setSelecting]=React.useState(false),[selected,setSelected]=React.useState<number[]>([]),[saving,setSaving]=React.useState<string[]|null>(null),[notice,setNotice]=React.useState('');
  const count=result.type==='音频'?55:result.type==='视频'?11:8;
  const files=Array.from({length:count},(_,i)=>{
   const base=result.title.replace(/\.(mp4|rmvb|mkv|mp3|pdf|zip)$/i,'').replace(/视频$/,'');
-  const name=result.type==='视频'?base.replace(/\s*1080P/ig,'')+' 1080P.mp4':result.type==='音频'?base+' 第'+String(i+1).padStart(2,'0')+'集.mp3':base+' '+String(i+1).padStart(2,'0')+(result.type==='文档'?'.pdf':result.type==='资料包'||result.type==='游戏'?'.zip':result.type==='网址'?'.html':'');
+  const name=result.type==='视频'?base.replace(/\s*1080P/ig,'')+(/全集/.test(result.title)?' 第'+String(i+1).padStart(2,'0')+'集':'')+' 1080P.mp4':result.type==='音频'?base+' 第'+String(i+1).padStart(2,'0')+'集.mp3':base+' '+String(i+1).padStart(2,'0')+(result.type==='文档'?'.pdf':result.type==='资料包'||result.type==='游戏'?'.zip':result.type==='网址'?'.html':'');
   return {name,size:result.type==='视频'?'230.0MB':result.type==='音频'?'12.0MB':'8.0MB'};
  });
  const exitSelection=()=>{setSelecting(false);setSelected([])};
@@ -22,15 +22,16 @@ export default function FileBrowser({question,onBack}:{question:string,onBack:()
   <div className="file-browser-status"><span>9:41</span><img src={assets.imgRightSide} alt="信号、无线网络和电量"/></div>
   <header className="file-browser-nav"><button aria-label={selecting?'取消多选':'返回搜索结果'} onClick={selecting?exitSelection:onBack}><img src={selecting?selectionAssets.img2025IcNavBarCloseBold24:assets.img2025IcCommonPagerPrevNormal48} alt=""/></button><h1>{selecting?'已选 '+selected.length+' 项':'查看文件'}</h1>{selecting?<button className="file-select-all" aria-label={selected.length===files.length?'取消全选':'全选'} aria-pressed={selected.length===files.length} onClick={()=>setSelected(selected.length===files.length?[]:files.map((_,i)=>i))}><span>全选</span><img src={selected.length===files.length?selectionAssets.img2025IcSelectorChecked24:selectionAssets.img2025IcSelectorUnchecked24} alt=""/></button>:<button aria-label="多选文件" onClick={()=>setSelecting(true)}><img src={assets.img2025IcCommonMultiselectNormal48} alt=""/></button>}</header>
   <div className="file-browser-tabs" role="tablist" aria-label="文件类型">{['全部',kind].map(t=><button key={t} role="tab" aria-selected={tab===t} onClick={()=>setTab(t)}>{t}</button>)}</div>
-  <div className="file-browser-list" style={{bottom:selecting?0:24}}>{files.map((file,i)=><div className="file-browser-row" key={i} onClick={selecting?()=>toggle(i):undefined}>
+  <div className="file-browser-list" style={{bottom:100}}>{files.map((file,i)=><div className="file-browser-row" key={i} onClick={selecting?()=>toggle(i):undefined}>
 
    <div className="file-browser-icon">{result.type==='视频'?<img className="file-video-icon" src={selecting?selectionAssets.img40:"./assets/44de1c2e-ba2b-47f5-943e-8f8230abab1c.svg"} alt="视频文件"/>:<img className="file-other-icon" src={'./assets/resource-'+(result.icon||'link')+'.svg'} alt={kind+'文件'}/>}</div>
-   <div className="file-browser-copy"><p>{file.name}</p><div><span>2024/09/23 18:23</span>{selecting&&<img className="file-meta-divider" src={selectionAssets.imgVector1918} alt=""/>}<span>{file.size}</span>{!selecting&&<button onClick={()=>setSaving(file.name)}>转存</button>}</div></div>
+   <div className="file-browser-copy"><p>{file.name}</p><div><span>2024/09/23 18:23</span>{selecting&&<img className="file-meta-divider" src={selectionAssets.imgVector1918} alt=""/>}<span>{file.size}</span>{!selecting&&<button onClick={()=>setSaving([file.name])}>转存</button>}</div></div>
    {selecting&&<button className="file-row-selector" role="checkbox" aria-checked={selected.includes(i)} aria-label={'选择'+file.name+'第'+(i+1)+'项'} onClick={e=>{e.stopPropagation();toggle(i)}}><img src={selected.includes(i)?selectionAssets.img2025IcSelectorChecked24:selectionAssets.img2025IcSelectorUnchecked24} alt=""/></button>}
   </div>)}</div>
 
+  <footer className="file-browser-savebar"><button disabled={selecting&&!selected.length} onClick={()=>setSaving((selecting?selected.map(i=>files[i]):files).map(file=>file.name))}>{selecting?'保存到云盘'+(selected.length?'（'+selected.length+'）':''):'保存到云盘'}</button></footer>
   {notice&&<p className="file-browser-notice" role="status">{notice}</p>}
-  {!selecting&&<div className="file-browser-indicator"><img src={assets.imgBarHomeIndicatorLight} alt=""/><span/></div>}
-  {saving&&<FolderPicker title={saving} onClose={()=>setSaving('')} onSaved={path=>{setNotice('已保存到'+path);setSaving('')}}/>}
+  <div className="file-browser-indicator"><img src={assets.imgBarHomeIndicatorLight} alt=""/><span/></div>
+  {saving&&<FolderPicker title={saving.length===1?saving[0]:'已选'+saving.length+'个文件'} fileNames={saving} onClose={()=>setSaving(null)} onSaved={path=>{setNotice('已保存到'+path);setSaving(null)}}/>}
  </section>,document.querySelector('.find-screen')!);
 }
