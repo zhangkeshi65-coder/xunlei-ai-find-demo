@@ -51,7 +51,7 @@ export default function AskConversation({question,onRestart,initiallyComplete=fa
   <div className="ask-connector one" data-node-id="37:8415"><svg width="2" height="37" viewBox="0 0 2 37" fill="none"><path d="M1 0V37" strokeWidth="2" stroke="#226DF5"/></svg></div>
   <div className="ask-connector two" data-node-id="37:8416"><svg width="2" height="37" viewBox="0 0 2 37" fill="none"><path d="M1 0V37" strokeWidth="2" stroke="#226DF5"/></svg></div>
   <div className="ask-results" data-node-id="37:8381">
-   <div className="ask-best"><h2>最佳匹配</h2><div className="ask-file"><div className="ask-folder"><img src={resultAssets.img2025IcLinkfile32} alt={result.type+"资源"}/></div><div><p>{result.title}</p><div className="ask-meta">{result.tags.map(tag=><span key={tag}>{tag}</span>)}</div></div></div><div className="ask-actions"><button onClick={()=>setDetails(true)}>查看详情</button><button onClick={()=>setPicker(true)}>{saved?'已保存':'保存云盘'}</button></div></div>
+   <div className="ask-best"><h2>最佳匹配</h2><div className="ask-file"><div className="ask-folder"><img src={'./assets/resource-'+(result.icon||'link')+'.svg'} alt={result.type+"资源"}/></div><div><p>{result.title}</p><div className="ask-meta">{result.tags.map(tag=><span key={tag}>{tag}</span>)}</div></div></div><div className="ask-actions"><button onClick={()=>setDetails(true)}>查看详情</button><button onClick={()=>setPicker(true)}>{saved?'已保存':'保存云盘'}</button></div></div>
    <button className="ask-all" onClick={()=>setDetails(true)}><span>查看全部12个结果<img src={assets.img2025IcCommonPagerNextNormal48} alt=""/></span><small>已按匹配度排序</small></button>
   </div>
   {saved&&<p className="ask-save-notice" role="status">已保存到 {saved}（本地预览）</p>}
