@@ -15,6 +15,7 @@ export default function FindPage({onBack}:{onBack:()=>void}){
  const root=React.useRef<HTMLDivElement>(null);
  const input=React.useRef<HTMLInputElement>(null);
  const introPlayed=React.useRef(false);
+ const [allResults,setAllResults]=React.useState(false);
  const [historyOpen,setHistoryOpen]=React.useState(false);
  const [history,setHistory]=React.useState<HistoryEntry[]>(()=>{try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]')}catch{return []}});
  const [message,setMessage]=React.useState('');
@@ -25,7 +26,7 @@ export default function FindPage({onBack}:{onBack:()=>void}){
  const openVoice=()=>{closeKeyboard();setVoice(true)};
  const pressKey=(key:string)=>{if(key==='Enter'){if(message.trim())submit(message);else closeKeyboard()}else if(key==='Backspace')setMessage(m=>Array.from(m).slice(0,-1).join(''));else setMessage(m=>m+key)};
  const [ask,setAsk]=React.useState<HistoryEntry|null>(null);
- const submit=(question:string)=>{if(!question.trim())return;const entry={question:question.trim(),key:Date.now()};setAsk(entry);setHistory(previous=>{const next=[entry,...previous].slice(0,100);try{localStorage.setItem(HISTORY_KEY,JSON.stringify(next))}catch{}return next});setMessage('');setKeyboard(false);input.current?.blur()};
+ const submit=(question:string)=>{if(!question.trim())return;const entry={question:question.trim(),key:Date.now()};setAllResults(false);setAsk(entry);setHistory(previous=>{const next=[entry,...previous].slice(0,100);try{localStorage.setItem(HISTORY_KEY,JSON.stringify(next))}catch{}return next});setMessage('');setKeyboard(false);input.current?.blur()};
  React.useLayoutEffect(()=>{
   if(ask||introPlayed.current)return;
   introPlayed.current=true;
@@ -43,17 +44,17 @@ export default function FindPage({onBack}:{onBack:()=>void}){
  },[ask]);
  return <div ref={root} className={"find-screen "+(keyboard?"keyboard-open ":"")+(voice?"voice-open":"")} data-node-id="37:7721">
   <div className="find-status"><span>9:41</span><img src={assets.imgRightSide} alt="信号、无线网络和电量"/></div>
-  <nav className="find-nav"><button aria-label="返回首页" onClick={()=>voice?setVoice(false):keyboard?closeKeyboard():ask?setAsk(null):onBack()}><img src={assets.img2025IcCommonBackNormal48} alt=""/></button><h1>找一找</h1><button aria-label="历史记录" onClick={()=>{closeKeyboard();setHistoryOpen(true)}}><img className="find-more" src={assets.imgFrame2085662804} alt=""/></button></nav>
+  <nav className="find-nav"><button aria-label="返回首页" onClick={()=>voice?setVoice(false):keyboard?closeKeyboard():allResults?setAllResults(false):ask?setAsk(null):onBack()}><img src={assets.img2025IcCommonBackNormal48} alt=""/></button><h1>找一找</h1><button aria-label="历史记录" onClick={()=>{closeKeyboard();setHistoryOpen(true)}}><img className="find-more" src={assets.imgFrame2085662804} alt=""/></button></nav>
   {!voice&&(!ask?<section className="find-welcome">
    <div className="find-greeting"><div className="find-avatar"><img src={assets.img04SparkGradient1} alt="迅雷AI"/></div><p data-node-id="37:7936" aria-label={GREETING}>{Array.from(GREETING).map((c,i)=><span key={i} className="find-char" aria-hidden="true">{c}</span>)}</p></div>
    <div className="find-choices">{choices.map(c=><button key={c.id} className="find-choice" data-node-id={c.id} onClick={()=>submit(c.id==='37:7939'?'帮我找《甄嬛传》全集':c.label)}><img src={c.image} alt=""/><span>{c.label}</span></button>)}</div>
-  </section>:<AskConversation key={ask.key} question={ask.question} initiallyComplete={ask.completed} onRestart={()=>setAsk(null)}/>)}
+  </section>:<AskConversation key={ask.key} question={ask.question} initiallyComplete={ask.completed} onRestart={()=>setAsk(null)} showAll={allResults} onShowAll={()=>setAllResults(true)}/>)}
   {!voice&&<form className="find-composer" onSubmit={e=>{e.preventDefault();submit(message)}}>
    <div className="find-input"><button type="button" aria-label="语音输入" onPointerDown={e=>e.preventDefault()} onClick={openVoice}><img src={assets.imgMessageVoice} alt=""/></button><input ref={input} aria-label="发消息" onFocus={()=>{if(!nativeKeyboard)setKeyboard(true)}} onKeyDown={e=>{if(e.key==='Escape')closeKeyboard()}} placeholder="发消息…" value={message} onChange={e=>setMessage(e.target.value)}/><button type="button" aria-label="表情" onClick={()=>setMessage(m=>m+'😊')}><img src={assets.imgMessageExpression} alt=""/></button><button type={message.trim()?"submit":"button"} aria-label={message.trim()?"发送询问":"添加"} onClick={()=>{if(!message.trim())input.current?.focus()}}>{message.trim()?<span className="ask-send">↑</span>:<img src={assets.imgAddCircle} alt=""/>}</button></div>
   </form>}
   {keyboard&&!voice&&<Keyboard onKey={pressKey} onClose={closeKeyboard}/>}
   {voice&&<VoiceMode onClose={()=>setVoice(false)}/>}
-  {historyOpen&&<HistoryPanel entries={history} onClose={()=>setHistoryOpen(false)} onSelect={entry=>{setAsk({...entry,key:Date.now()});setHistoryOpen(false);setVoice(false)}}/>}
+  {historyOpen&&<HistoryPanel entries={history} onClose={()=>setHistoryOpen(false)} onSelect={entry=>{setAllResults(false);setAsk({...entry,key:Date.now()});setHistoryOpen(false);setVoice(false)}}/>}
   <div className="find-home-indicator"><span/></div>
  </div>
 }
