@@ -51,3 +51,8 @@
 .ask-flow .ask-step{overflow:hidden;animation:thinking-step-grow .34s cubic-bezier(.2,.8,.2,1) both}.ask-flow .ask-summary{overflow:hidden;animation:thinking-summary-grow .34s cubic-bezier(.2,.8,.2,1) both}@keyframes thinking-step-grow{from{height:0;margin-bottom:0;opacity:0;transform:translateY(4px)}to{height:38px;margin-bottom:12px;opacity:1;transform:translateY(0)}}@keyframes thinking-summary-grow{from{max-height:0;opacity:0}to{max-height:60px;opacity:1}}@media(prefers-reduced-motion:reduce){.ask-flow .ask-step,.ask-flow .ask-summary{animation:none}}
 
 .phone [data-node-id="37:8262"]{display:none;animation:none}.phone.find-tab-active [data-node-id="37:8262"]{display:flex;width:76px;animation:tab-tip-in .28s ease-out both}.phone.find-tab-active [data-node-id="37:8263"]{opacity:1;animation:none}.find-tab-active [data-node-id="37:8256"]{color:#8e8f93}.find-tab-active [data-node-id="37:8260"]{color:#111216}.find-tab-active [data-node-id="37:8257"]{background:transparent}.find-tab-active [data-node-id="37:8261"]{background:#226df5}.find-screen.find-tab-entry{top:185.5px;bottom:73px;border-radius:0;z-index:10}.find-tab-entry .find-status,.find-tab-entry .find-nav,.find-tab-entry .find-home-indicator{display:none}.find-tab-entry .find-welcome{top:32px}.find-greeting p{font-size:16px}.find-choice span{font-size:15px}@keyframes tab-tip-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}@media(prefers-reduced-motion:reduce){.phone.find-tab-active [data-node-id="37:8262"]{animation:none}}
+
+/* Resource browsing uses the full space above the home indicator. */
+.viewing-all-results .resource-list{bottom:34px}
+.ask-best{border-color:#1112160d}
+.find-screen .ask-all{border-color:#1112160d}
