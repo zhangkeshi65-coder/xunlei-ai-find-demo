@@ -58,3 +58,8 @@
 .find-screen .ask-all{border-color:#1112160d}
 
 .find-greeting p{font-size:18px}.find-choice span{font-size:16px}.find-screen .find-hot{position:absolute;bottom:90px;left:12px;height:30px;padding:0 16px;border:1px solid #87a8ff;border-radius:20px;background:linear-gradient(100deg,#fff 20%,#e7dcff);font-size:13px;font-weight:600;color:#152980}@media(max-width:389px){.find-greeting p{font-size:clamp(14px,4.6vw,18px)}}
+
+/* Recommendation pills contain the full label at every viewport width. */
+.find-choices{width:calc(100% - 52px);align-items:flex-start}
+.find-screen .find-choice{width:fit-content;max-width:100%;height:auto;min-height:46px;padding:3px 16px;white-space:normal}
+.find-choice span{min-width:0;white-space:normal;overflow-wrap:anywhere;text-align:left;line-height:22px}
