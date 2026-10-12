@@ -1,5 +1,4 @@
 import React from 'react';
-import motionData from './askMotion.json';
 import ResourceList from './ResourceList';
 import FolderPicker from './FolderPicker';
 import {resourceResult} from './resourceResult';
@@ -15,46 +14,37 @@ export default function AskConversation({question,onRestart,initiallyComplete=fa
  const [complete,setComplete]=React.useState(initiallyComplete);
  const [expanded,setExpanded]=React.useState(false);
  const [details,setDetails]=React.useState(false);
- React.useLayoutEffect(()=>{
-  const el=root.current!;
-  const reduced=initiallyComplete||matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const animations:Animation[]=[];
-  for(const node of motionData){
-   const target=el.querySelector<HTMLElement>('[data-node-id="'+node.id+'"]')!;
-   if(!target)throw new Error('Missing motion node '+node.id);
-   if(reduced)continue;
-   for(const [key,values] of Object.entries(node.values)){
-    if(key==='scaleY')continue;
-    const track=(node.tracks as any)[key];
-    const property=key==='y'?'translate':key==='rotate'?'rotate':key==='scaleX'?'scale':'opacity';
-    const frames=(values as number[]).map((v,i)=>({[property]:key==='y'?'0 '+v+'px':key==='rotate'?v+'deg':v,offset:track.times[i],easing:easing(track.ease[i])}));
-    animations.push(target.animate(frames,{duration,iterations:1,fill:'both'}));
-   }
-  }
-  for(const [id,start,end] of [['37:8415',.382,.468],['37:8416',.554,.64]] as const){
-   const path=el.querySelector('[data-node-id="'+id+'"] path')!;
-   path.setAttribute('pathLength','1');
-   if(!reduced)animations.push(path.animate([{strokeDasharray:'0 1',offset:0},{strokeDasharray:'0 1',offset:start,easing:'ease-out'},{strokeDasharray:'1 1',offset:end},{strokeDasharray:'1 1',offset:1}],{duration,iterations:1,fill:'both'}));
-  }
-  const timer=window.setTimeout(()=>setComplete(true),reduced?0:duration);
-  return ()=>{clearTimeout(timer);animations.forEach(a=>a.cancel())};
- },[question]);
+ const reduced=initiallyComplete||matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const [stage,setStage]=React.useState(reduced?4:0);
+ const [resultReady,setResultReady]=React.useState(reduced);
+ React.useEffect(()=>{
+  if(reduced){setComplete(true);return}
+  const timers=[
+   window.setTimeout(()=>setStage(1),700),
+   window.setTimeout(()=>setStage(2),2300),
+   window.setTimeout(()=>setStage(3),4000),
+   window.setTimeout(()=>setStage(4),5600),
+   window.setTimeout(()=>setResultReady(true),6100),
+   window.setTimeout(()=>setComplete(true),7100)
+  ];
+  return ()=>timers.forEach(clearTimeout);
+ },[question,reduced]);
  if(showAll)return <ResourceList question={question}/>;
  return <div ref={root} className={"ask-conversation "+(complete?"ask-complete ":"")+(expanded?"ask-expanded":"")} data-node-id="37:8297">
   <div className="ask-time">13:56</div>
   <div className="ask-user"><p data-node-id="37:8303">{question}</p><div className="ask-user-avatar"><img data-node-id="37:8305" src={assets.imgImage336} alt="用户头像"/></div></div>
   <div className="ask-ai-avatar" data-node-id="37:8309"><img src={assets.img} alt="迅雷AI"/></div>
   {complete&&<button className="ask-completed-toggle" aria-expanded={expanded} onClick={()=>setExpanded(e=>!e)}>已完成任务 <span><img src={resultAssets.imgArrowChevronRight} alt="" style={{rotate:expanded?"90deg":"0deg"}}/></span></button>}
-  <div className="ask-process" data-node-id="37:8341">
-   <div className="ask-progress-heading"><p data-node-id="37:8343">正在思考......</p><p data-node-id="37:8347">收集相关信息和资源......</p></div>
-   {[{check:'37:8350',text:'37:8354',status:'37:8356',label:'理解需求',image:assets.img1},{check:'37:8360',text:'37:8363',status:'37:8365',label:'检索可保存资源',image:assets.imgFrame2119903382},{check:'37:8369',text:'37:8372',status:'37:8374',label:result.type==='视频'?'校验集数与清晰度':result.type==='音频'?'校验音频与完整性':'校验文件与完整性',image:assets.img2}].map(step=><div key={step.text} className="ask-step"><div className="ask-step-title"><span data-node-id={step.check}><img src={step.image} alt="完成"/></span><p data-node-id={step.text}>{step.label}</p></div><p className="ask-step-status" data-node-id={step.status}>已完成</p></div>)}
-   <div className="ask-summary"><p data-node-id="37:8378">找到18个链接，去重剩余<span>12</span>个</p><p className="ask-step-status" data-node-id="37:8380">已完成</p></div>
+  <div className="ask-flow"><div className="ask-process-collapse"><div className="ask-process" data-node-id="37:8341">
+   <div className="ask-progress-heading"><p>{stage===0?'准备中':stage===4?'资源整理完成':'正在查找相关资源'}</p></div>
+   {[{check:'37:8350',text:'37:8354',status:'37:8356',label:'理解需求',image:assets.img1},{check:'37:8360',text:'37:8363',status:'37:8365',label:'检索可保存资源',image:assets.imgFrame2119903382},{check:'37:8369',text:'37:8372',status:'37:8374',label:result.type==='视频'?'校验集数与清晰度':result.type==='音频'?'校验音频与完整性':'校验文件与完整性',image:assets.img2}].slice(0,Math.min(stage,3)).map((step,index)=><div key={step.text} className={"ask-step "+(stage>index+1?"step-done":"step-active")}><div className="ask-step-title"><span data-node-id={step.check}>{stage>index+1?<img src={step.image} alt="完成"/>:<i className="thinking-spinner" aria-label="处理中"/>}</span><p data-node-id={step.text}>{step.label}</p></div><p className="ask-step-status" data-node-id={step.status}>{stage>index+1?'已完成':'处理中…'}</p></div>)}
+   {stage===4&&<div className="ask-summary"><p data-node-id="37:8378">找到18个链接，去重剩余<span>12</span>个</p><p className="ask-step-status" data-node-id="37:8380">已完成</p></div>}
   </div>
-  <div className="ask-connector one" data-node-id="37:8415"><svg width="2" height="37" viewBox="0 0 2 37" fill="none"><path d="M1 0V37" strokeWidth="2" stroke="#226DF5"/></svg></div>
-  <div className="ask-connector two" data-node-id="37:8416"><svg width="2" height="37" viewBox="0 0 2 37" fill="none"><path d="M1 0V37" strokeWidth="2" stroke="#226DF5"/></svg></div>
-  <div className="ask-results" data-node-id="37:8381">
+  </div>
+  {resultReady&&<div className="ask-results" data-node-id="37:8381">
    <div className="ask-best"><h2>最佳匹配</h2><div className="ask-file"><div className="ask-folder"><img src={result.type==='视频'?'./assets/results-folder.svg':'./assets/resource-'+(result.icon||'link')+'.svg'} alt={result.type+"资源"}/></div><div><p>{result.title}</p><div className="ask-meta">{result.tags.map(tag=><span key={tag}>{tag}</span>)}</div></div></div><div className="ask-actions"><button onClick={()=>setDetails(true)}>查看详情</button><button onClick={()=>setPicker(true)}>{saved?'已保存':'保存云盘'}</button></div></div>
    <button className="ask-all" onClick={onShowAll}><span>查看全部12个结果<img src={assets.img2025IcCommonPagerNextNormal48} alt=""/></span><small>已按匹配度排序</small></button>
+  </div>}
   </div>
   {saved&&<p className="ask-save-notice" role="status">已保存到 {saved}（本地预览）</p>}
   {picker&&<FolderPicker title={result.title} onClose={()=>setPicker(false)} onSaved={path=>{setSaved(path);setPicker(false)}}/>}

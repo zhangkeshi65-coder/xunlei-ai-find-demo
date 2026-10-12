@@ -27,3 +27,25 @@
 .ask-complete:not(.ask-expanded) .ask-results{transition-delay:.12s}
 .ask-completed-toggle img{transition:rotate .24s ease-out}
 @media(prefers-reduced-motion:reduce){.ask-process,.ask-connector,.ask-results,.ask-complete .ask-results,.ask-complete:not(.ask-expanded) .ask-process,.ask-complete:not(.ask-expanded) .ask-connector,.ask-completed-toggle img{transition:none}}
+
+/* Progressive thinking: each task joins the flow; completed tasks stay in place. */
+.ask-flow{position:absolute;top:164px;left:61px;width:269px;display:flex;flex-direction:column;gap:12px;padding-bottom:16px}
+.ask-flow .ask-process-collapse{display:grid;grid-template-rows:1fr;opacity:1;transition:grid-template-rows .44s cubic-bezier(.4,0,.2,1),opacity .2s ease-out}
+.ask-flow .ask-process{position:relative;top:auto;left:auto;width:100%;min-height:0;overflow:hidden;opacity:1;transform:none;visibility:visible;transition:none;box-sizing:border-box}
+.ask-flow .ask-progress-heading{height:16px;margin-bottom:12px}
+.ask-flow .ask-progress-heading p{position:static}
+.ask-flow .ask-step{height:38px;margin-bottom:12px;animation:thinking-row-in .3s ease-out both}
+.ask-flow .ask-summary{animation:thinking-row-in .3s ease-out both;padding-bottom:2px}
+.ask-complete:not(.ask-expanded) .ask-flow{gap:0}
+.ask-complete:not(.ask-expanded) .ask-process-collapse{grid-template-rows:0fr;opacity:0;pointer-events:none}
+.ask-complete:not(.ask-expanded) .ask-flow .ask-process{padding-top:0;padding-bottom:0;border-width:0;opacity:1;visibility:visible;transform:none;transition:padding .44s,border-width .44s}
+.ask-flow .ask-results,.ask-complete .ask-flow .ask-results,.ask-complete.ask-expanded .ask-flow .ask-results{position:relative;top:auto;left:auto;width:100%;padding-bottom:0;transition:none;animation:thinking-result-in .42s cubic-bezier(.22,1,.36,1) both}
+.thinking-spinner{display:block;width:12px;height:12px;border:1.5px solid #226df533;border-top-color:#226df5;border-radius:50%;animation:thinking-spin .8s linear infinite}
+.step-active .ask-step-status{color:#8e8f93}
+@keyframes thinking-spin{to{transform:rotate(360deg)}}
+@keyframes thinking-row-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes thinking-result-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:350px){.ask-flow{left:52px;width:calc(100% - 68px)}}
+@media(prefers-reduced-motion:reduce){.ask-flow .ask-process-collapse,.ask-complete:not(.ask-expanded) .ask-flow .ask-process{transition:none}.ask-flow .ask-step,.ask-flow .ask-summary,.ask-flow .ask-results,.ask-complete .ask-flow .ask-results,.thinking-spinner{animation:none}}
+
+.ask-flow .ask-step{overflow:hidden;animation:thinking-step-grow .34s cubic-bezier(.2,.8,.2,1) both}.ask-flow .ask-summary{overflow:hidden;animation:thinking-summary-grow .34s cubic-bezier(.2,.8,.2,1) both}@keyframes thinking-step-grow{from{height:0;margin-bottom:0;opacity:0;transform:translateY(4px)}to{height:38px;margin-bottom:12px;opacity:1;transform:translateY(0)}}@keyframes thinking-summary-grow{from{max-height:0;opacity:0}to{max-height:60px;opacity:1}}@media(prefers-reduced-motion:reduce){.ask-flow .ask-step,.ask-flow .ask-summary{animation:none}}
