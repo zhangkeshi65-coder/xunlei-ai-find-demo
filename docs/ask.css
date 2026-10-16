@@ -79,3 +79,4 @@
 /* Explain the request criteria without claiming verified resource quality. */
 .ask-best{height:auto;min-height:174px;gap:12px}.ask-match-reason{margin:0;padding:6px 8px;background:#f6f8fc;border-radius:6px;color:#545b67;font-size:12px;line-height:18px;overflow-wrap:anywhere}.ask-match-reason>span{display:block;color:#8e8f93;font-size:11px;line-height:16px;margin-bottom:2px}
 .resource-summary{min-height:0;padding-top:16px;padding-bottom:16px}.resource-summary h2{margin-bottom:0}
+.folder-resource-summary{margin:0 0 12px;flex-shrink:0;padding:8px 12px;border-radius:8px;background:#f6f7f9}.folder-resource-summary small{display:block;color:#8e8f93;font-size:11px;line-height:16px;margin-bottom:4px}.folder-resource-summary span{display:block;color:#111216;font-size:13px;line-height:20px;overflow-wrap:anywhere}
