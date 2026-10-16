@@ -7,7 +7,7 @@ function classifyResource(question:string):ResourceResult{
  if(/\.(?:rmvb|mp4|mkv|avi|mov|wmv)\b|视频/i.test(q))return {title,type:'视频',tags:[]};
  if(/https?:\/\/|www\.|网址|网站|网页|链接|HTML/i.test(q))return {title:subject,type:'网址',tags:['网页链接','可保存'],icon:'web'};
  if(/资料包|压缩包|资源包|合集包|ZIP|RAR|7z/i.test(q))return {title,type:'资料包',tags:['资料包','压缩文件'],icon:'zip'};
- if(/有声|音频|听书|播客|mp3|flac|wav|m4a/i.test(q))return {title:title.replace(/有声书$/,'')+'有声书',type:'音频',icon:'link',tags:/被讨厌的勇气/.test(q)?['全55集','内存小']:['有声书','音频资源']};
+ if(/有声|音频|听书|播客|mp3|flac|wav|m4a/i.test(q))return {title:/有声|听书/.test(q)?title.replace(/有声书$/,'')+'有声书':title,type:'音频',icon:'link',tags:/被讨厌的勇气/.test(q)?['全55集','内存小']:['有声书','音频资源']};
  if(/PDF|EPUB|MOBI|AZW3|DOCX?|PPTX?|XLSX?|电子书|学习|资料|练习|文档|书籍/i.test(q))return {title:/PDF/i.test(q)?title:title.replace(/电子书$/,'')+'电子书与资料',type:'文档',icon:'pdf',tags:[/PDF/i.test(q)?'PDF':'学习资料','文档资源']};
  if(/游戏|刺客信条|安装包/i.test(q))return {title:/游戏/.test(title)?title:title+'游戏资源',type:'游戏',tags:['安装包','游戏资源']};
  if(/电影|蓝光|4K|奥本海默|流浪地球/i.test(q))return {title,type:'视频',tags:[/4K/i.test(q)?'4K':'高清','电影资源']};
@@ -30,5 +30,6 @@ export function resourceResult(question:string):ResourceResult{
   if(/中文字幕/.test(q))tags.push('中文字幕');
   if(/全集/.test(q))tags.push('全集');
  }
- return {...result,tags};
+ const resourceTitle=result.type==='视频'&&/全集/.test(q)&&!result.title.endsWith('全集')?result.title+'全集':result.title;
+ return {...result,title:resourceTitle,tags};
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import {createPortal} from 'react-dom';
 import FolderPicker from './FolderPicker';
 import {resourceResult} from './resourceResult';
+import {resourceFiles} from './resourceFiles';
 import assets from './filePageAssets';
 import selectionAssets from './selectionAssets';
 import {saveFeedback} from './cloudStore';
@@ -9,12 +10,7 @@ export default function FileBrowser({question,onBack}:{question:string,onBack:()
  const result=resourceResult(question);
  const kind=result.type==='视频'?'视频':result.type==='音频'?'音频':result.type==='文档'?'文档':'文件';
  const[tab,setTab]=React.useState('全部'),[selecting,setSelecting]=React.useState(false),[selected,setSelected]=React.useState<number[]>([]),[saving,setSaving]=React.useState<string[]|null>(null),[notice,setNotice]=React.useState('');
- const count=result.type==='音频'?55:result.type==='视频'?(/全集/.test(result.title)?11:1):8;
- const files=Array.from({length:count},(_,i)=>{
-  const base=result.title.replace(/\.(mp4|rmvb|mkv|mp3|pdf|zip)$/i,'').replace(/视频$/,'');
-  const name=result.type==='视频'?base.replace(/\s*1080P/ig,'')+(/全集/.test(result.title)?' 第'+String(i+1).padStart(2,'0')+'集':'')+' 1080P.mp4':result.type==='音频'?base+' 第'+String(i+1).padStart(2,'0')+'集.mp3':base+' '+String(i+1).padStart(2,'0')+(result.type==='文档'?'.pdf':result.type==='资料包'||result.type==='游戏'?'.zip':result.type==='网址'?'.html':'');
-  return {name,size:result.type==='视频'?'230.0MB':result.type==='音频'?'12.0MB':'8.0MB'};
- });
+ const files=resourceFiles(question,result);
  const exitSelection=()=>{setSelecting(false);setSelected([])};
  const toggle=(i:number)=>setSelected(s=>s.includes(i)?s.filter(x=>x!==i):[...s,i]);
  React.useEffect(()=>{const handler=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!saving){if(selecting)exitSelection();else onBack()}};window.addEventListener('keydown',handler);return()=>window.removeEventListener('keydown',handler)},[onBack,saving,selecting]);
