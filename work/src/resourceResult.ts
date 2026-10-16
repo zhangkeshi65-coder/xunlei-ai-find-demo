@@ -11,7 +11,7 @@ function classifyResource(question:string):ResourceResult{
  if(/PDF|EPUB|MOBI|AZW3|DOCX?|PPTX?|XLSX?|电子书|学习|资料|练习|文档|书籍/i.test(q))return {title:/PDF/i.test(q)?title:title.replace(/电子书$/,'')+'电子书与资料',type:'文档',icon:'pdf',tags:[/PDF/i.test(q)?'PDF':'学习资料','文档资源']};
  if(/游戏|刺客信条|安装包/i.test(q))return {title:/游戏/.test(title)?title:title+'游戏资源',type:'游戏',tags:['安装包','游戏资源']};
  if(/电影|蓝光|4K|奥本海默|流浪地球/i.test(q))return {title,type:'视频',tags:[/4K/i.test(q)?'4K':'高清','电影资源']};
- if(/电视剧|全集|甄嬛传|漫长的季节/i.test(q))return {title:title.replace(/高清全集|全集$/,'')+'全集',type:'视频',tags:['全集','视频资源']};
+ if(/电视剧|全集|甄嬛传|漫长的季节|黑暗荣耀/i.test(q))return {title:title.replace(/高清全集|全集$/,'')+'全集',type:'视频',tags:['全集','视频资源']};
  return {title,type:'文件',tags:['相关资源','可保存']};
 }
 
@@ -28,8 +28,8 @@ export function resourceResult(question:string):ResourceResult{
   const quality=q.match(/4K|2160[Pp]|1080[Pp]|720[Pp]/i)?.[0]?.toUpperCase();
   if(quality)tags.push(quality);
   if(/中文字幕/.test(q))tags.push('中文字幕');
-  if(/全集/.test(q))tags.push('全集');
+  if(/全集|电视剧|甄嬛传|漫长的季节|黑暗荣耀/.test(q))tags.push('全集');
  }
- const resourceTitle=result.type==='视频'&&/全集/.test(q)&&!result.title.endsWith('全集')?result.title+'全集':result.title;
+ const resourceTitle=result.type==='视频'&&/全集|电视剧|甄嬛传|漫长的季节|黑暗荣耀/.test(q)&&!result.title.endsWith('全集')?result.title+'全集':result.title;
  return {...result,title:resourceTitle,tags};
 }
