@@ -4,7 +4,8 @@ import Header from './Part0';
 import Content from './Part1';
 import Footer from './Part2';
 import FindPage from './FindPage';
-function App(){const [find,setFind]=React.useState(false);React.useEffect(()=>bindUI(()=>setFind(true),()=>setFind(false)),[]);return <main className={'phone '+(find?'find-tab-active':'')}><header><Header/></header><section className="scroll-content"><Content/></section><footer><Footer/></footer><dialog id="action"><form method="dialog"><h3 id="action-title"/><input aria-label="输入内容" placeholder="请输入链接或内容"/><button>完成</button><button>关闭</button></form></dialog>{find&&<FindPage onBack={()=>setFind(false)}/>}</main>}
+import CloudLocation from './CloudLocation';
+function App(){const [find,setFind]=React.useState(false);const[cloudLocation,setCloudLocation]=React.useState<{parent:string|null,highlightId?:string}|null>(null);React.useEffect(()=>bindUI(()=>setFind(true),()=>setFind(false)),[]);return <main className={'phone '+(find?'find-tab-active':'')}><header><Header/></header><section className="scroll-content"><Content onOpenSaved={(parent,highlightId)=>setCloudLocation({parent,highlightId})} onFind={()=>setFind(true)}/></section><footer><Footer/></footer><dialog id="action"><form method="dialog"><h3 id="action-title"/><input aria-label="输入内容" placeholder="请输入链接或内容"/><button>完成</button><button>关闭</button></form></dialog>{find&&<FindPage onBack={()=>setFind(false)}/>}{cloudLocation&&<CloudLocation key={cloudLocation.highlightId||'root'} {...cloudLocation} onBack={()=>setCloudLocation(null)}/>}</main>}
 createRoot(document.getElementById('root')!).render(<App/>);
 function bindUI(openFind:()=>void,openSearch:()=>void){
  const byId=(id:string)=>document.querySelector(`[data-node-id="${id}"]`) as HTMLElement;
