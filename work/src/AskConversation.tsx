@@ -9,6 +9,8 @@ const duration=13026;
 function easing(value:any):string{return Array.isArray(value)?'cubic-bezier('+value.join(',')+')':value==='easeOut'?'ease-out':value||'linear'}
 export default function AskConversation({question,onRestart,initiallyComplete=false,showAll=false,onShowAll}:{question:string,onRestart:()=>void,initiallyComplete?:boolean,showAll?:boolean,onShowAll:()=>void}){
  const result=resourceResult(question);
+ const matchConditions=result.tags.filter(tag=>tag!=='最匹配');
+ const matchDescription=result.type==='文件'&&matchConditions.length===1?'按资源名称查找':matchConditions.join(' · ');
  const root=React.useRef<HTMLDivElement>(null);
  const [saved,setSaved]=React.useState('');
  const [picker,setPicker]=React.useState(false);
@@ -43,7 +45,7 @@ export default function AskConversation({question,onRestart,initiallyComplete=fa
   </div>
   </div>
   {resultReady&&<div className="ask-results" data-node-id="37:8381">
-   <div className="ask-best"><h2>最佳匹配</h2><div className="ask-file"><div className="ask-folder"><img src={result.type==='视频'?'./assets/results-folder.svg':'./assets/resource-'+(result.icon||'link')+'.svg'} alt={result.type+"资源"}/></div><div><p>{result.title}</p><div className="ask-meta">{result.tags.map(tag=><span key={tag}>{tag}</span>)}</div></div></div><div className="ask-actions"><button onClick={()=>setDetails(true)}>查看文件</button><button onClick={()=>setPicker(true)}>{saved?'已保存':'保存云盘'}</button></div></div>
+   <div className="ask-best"><h2>推荐资源</h2><div className="ask-file"><div className="ask-folder"><img src={result.type==='视频'?'./assets/results-folder.svg':'./assets/resource-'+(result.icon||'link')+'.svg'} alt={result.type+"资源"}/></div><div><p>{result.title}</p><div className="ask-meta">{matchConditions.map(tag=><span key={tag}>{tag}</span>)}</div></div></div><p className="ask-match-reason"><span>本次匹配条件</span>{matchDescription}</p><div className="ask-actions"><button onClick={()=>setDetails(true)}>查看文件</button><button onClick={()=>setPicker(true)}>{saved?'已保存':'保存云盘'}</button></div></div>
    <button className="ask-all" onClick={onShowAll}><span>查看全部资源<img src={assets.img2025IcCommonPagerNextNormal48} alt=""/></span><small>比较不同版本与来源</small></button>
   </div>}
   </div>
