@@ -4,6 +4,7 @@ import FolderPicker from './FolderPicker';
 import {resourceResult} from './resourceResult';
 import assets from './filePageAssets';
 import selectionAssets from './selectionAssets';
+import {saveFeedback} from './cloudStore';
 export default function FileBrowser({question,onBack}:{question:string,onBack:()=>void}){
  const result=resourceResult(question);
  const kind=result.type==='视频'?'视频':result.type==='音频'?'音频':result.type==='文档'?'文档':'文件';
@@ -32,6 +33,6 @@ export default function FileBrowser({question,onBack}:{question:string,onBack:()
   <footer className="file-browser-savebar"><button disabled={selecting&&!selected.length} onClick={()=>setSaving((selecting?selected.map(i=>files[i]):files).map(file=>file.name))}>{selecting?'保存所选（'+selected.length+'）':'保存全部文件'}</button></footer>
   {notice&&<p className="file-browser-notice" role="status">{notice}</p>}
   <div className="file-browser-indicator"><img src={assets.imgBarHomeIndicatorLight} alt=""/><span/></div>
-  {saving&&<FolderPicker title={saving.length===1?saving[0]:'已选'+saving.length+'个文件'} fileNames={saving} onClose={()=>setSaving(null)} onSaved={path=>{setNotice('已保存'+new Set(saving).size+'个文件到'+path);setSaving(null)}}/>}
+  {saving&&<FolderPicker title={saving.length===1?saving[0]:'已选'+saving.length+'个文件'} fileNames={saving} onClose={()=>setSaving(null)} onSaved={(path,outcome)=>{setNotice(saveFeedback(path,outcome));setSaving(null)}}/>}
  </section>,document.querySelector('.find-screen')!);
 }
