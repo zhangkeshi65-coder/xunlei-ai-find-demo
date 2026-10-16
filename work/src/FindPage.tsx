@@ -1,4 +1,5 @@
 import React from 'react';
+import {armSaveFailureDemo} from './saveFailureDemo';
 import AskConversation from './AskConversation';
 import Keyboard from './Keyboard';
 import VoiceMode from './VoiceMode';
@@ -26,7 +27,7 @@ export default function FindPage({onBack}:{onBack:()=>void}){
  const openVoice=()=>{closeKeyboard();setVoice(true)};
  const pressKey=(key:string)=>{if(key==='Enter'){if(message.trim())submit(message);else closeKeyboard()}else if(key==='Backspace')setMessage(m=>Array.from(m).slice(0,-1).join(''));else setMessage(m=>m+key)};
  const [ask,setAsk]=React.useState<HistoryEntry|null>(null);
- const submit=(question:string)=>{if(!question.trim())return;const entry={question:question.trim(),key:Date.now()};setAllResults(false);setAsk(entry);setHistory(previous=>{const next=[entry,...previous].slice(0,100);try{localStorage.setItem(HISTORY_KEY,JSON.stringify(next))}catch{}return next});setMessage('');setKeyboard(false);input.current?.blur()};
+ const submit=(question:string)=>{if(!question.trim())return;if(question.trim()==='测试保存失败')armSaveFailureDemo();const entry={question:question.trim(),key:Date.now()};setAllResults(false);setAsk(entry);setHistory(previous=>{const next=[entry,...previous].slice(0,100);try{localStorage.setItem(HISTORY_KEY,JSON.stringify(next))}catch{}return next});setMessage('');setKeyboard(false);input.current?.blur()};
  React.useLayoutEffect(()=>{
   if(ask||introPlayed.current)return;
   introPlayed.current=true;
