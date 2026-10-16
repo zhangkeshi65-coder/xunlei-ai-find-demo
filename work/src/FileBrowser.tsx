@@ -8,7 +8,7 @@ export default function FileBrowser({question,onBack}:{question:string,onBack:()
  const result=resourceResult(question);
  const kind=result.type==='视频'?'视频':result.type==='音频'?'音频':result.type==='文档'?'文档':'文件';
  const[tab,setTab]=React.useState('全部'),[selecting,setSelecting]=React.useState(false),[selected,setSelected]=React.useState<number[]>([]),[saving,setSaving]=React.useState<string[]|null>(null),[notice,setNotice]=React.useState('');
- const count=result.type==='音频'?55:result.type==='视频'?11:8;
+ const count=result.type==='音频'?55:result.type==='视频'?(/全集/.test(result.title)?11:1):8;
  const files=Array.from({length:count},(_,i)=>{
   const base=result.title.replace(/\.(mp4|rmvb|mkv|mp3|pdf|zip)$/i,'').replace(/视频$/,'');
   const name=result.type==='视频'?base.replace(/\s*1080P/ig,'')+(/全集/.test(result.title)?' 第'+String(i+1).padStart(2,'0')+'集':'')+' 1080P.mp4':result.type==='音频'?base+' 第'+String(i+1).padStart(2,'0')+'集.mp3':base+' '+String(i+1).padStart(2,'0')+(result.type==='文档'?'.pdf':result.type==='资料包'||result.type==='游戏'?'.zip':result.type==='网址'?'.html':'');
@@ -29,9 +29,9 @@ export default function FileBrowser({question,onBack}:{question:string,onBack:()
    {selecting&&<button className="file-row-selector" role="checkbox" aria-checked={selected.includes(i)} aria-label={'选择'+file.name+'第'+(i+1)+'项'} onClick={e=>{e.stopPropagation();toggle(i)}}><img src={selected.includes(i)?selectionAssets.img2025IcSelectorChecked24:selectionAssets.img2025IcSelectorUnchecked24} alt=""/></button>}
   </div>)}</div>
 
-  <footer className="file-browser-savebar"><button disabled={selecting&&!selected.length} onClick={()=>setSaving((selecting?selected.map(i=>files[i]):files).map(file=>file.name))}>{selecting?'保存到云盘'+(selected.length?'（'+selected.length+'）':''):'保存到云盘'}</button></footer>
+  <footer className="file-browser-savebar"><button disabled={selecting&&!selected.length} onClick={()=>setSaving((selecting?selected.map(i=>files[i]):files).map(file=>file.name))}>{selecting?'保存所选（'+selected.length+'）':'保存全部文件'}</button></footer>
   {notice&&<p className="file-browser-notice" role="status">{notice}</p>}
   <div className="file-browser-indicator"><img src={assets.imgBarHomeIndicatorLight} alt=""/><span/></div>
-  {saving&&<FolderPicker title={saving.length===1?saving[0]:'已选'+saving.length+'个文件'} fileNames={saving} onClose={()=>setSaving(null)} onSaved={path=>{setNotice('已保存到'+path);setSaving(null)}}/>}
+  {saving&&<FolderPicker title={saving.length===1?saving[0]:'已选'+saving.length+'个文件'} fileNames={saving} onClose={()=>setSaving(null)} onSaved={path=>{setNotice('已保存'+new Set(saving).size+'个文件到'+path);setSaving(null)}}/>}
  </section>,document.querySelector('.find-screen')!);
 }
