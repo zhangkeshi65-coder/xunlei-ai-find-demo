@@ -20,11 +20,13 @@ export default function AskConversation({question,onRestart,onEdit,onRetry,initi
  const [picker,setPicker]=React.useState(false);
  const [complete,setComplete]=React.useState(initiallyComplete);
  const [expanded,setExpanded]=React.useState(false);
+ const [stopped,setStopped]=React.useState(false);
  const [details,setDetails]=React.useState(false);
  const reduced=initiallyComplete||matchMedia('(prefers-reduced-motion: reduce)').matches;
  const [stage,setStage]=React.useState(reduced?4:0);
  const [resultReady,setResultReady]=React.useState(reduced);
  React.useEffect(()=>{
+  if(stopped)return;
   if(reduced){setComplete(true);return}
   const timers=[
    window.setTimeout(()=>setStage(1),700),
@@ -35,21 +37,23 @@ export default function AskConversation({question,onRestart,onEdit,onRetry,initi
    window.setTimeout(()=>setComplete(true),7100)
   ];
   return ()=>timers.forEach(clearTimeout);
- },[question,reduced]);
- if(showAll&&!noResults)return <ResourceList question={question}/>;
+ },[question,reduced,stopped]);
+ if(showAll&&!noResults&&!stopped)return <ResourceList question={question}/>;
  return <div ref={root} className={"ask-conversation "+(complete?"ask-complete ":"")+(expanded?"ask-expanded":"")} data-node-id="37:8297">
   <div className="ask-time">13:56</div>
   <div className="ask-user"><p data-node-id="37:8303">{question}</p><div className="ask-user-avatar"><img data-node-id="37:8305" src={assets.imgImage336} alt="用户头像"/></div></div>
   <div className="ask-ai-avatar" data-node-id="37:8309"><img src={assets.img} alt="迅雷AI"/></div>
-  {complete&&<button className="ask-completed-toggle" aria-expanded={expanded} onClick={()=>setExpanded(e=>!e)}>{noResults?'未找到资源':'已完成任务'} <span><img src={resultAssets.imgArrowChevronRight} alt="" style={{rotate:expanded?"90deg":"0deg"}}/></span></button>}
+  {complete&&<button className="ask-completed-toggle" aria-expanded={expanded} onClick={()=>setExpanded(e=>!e)}>{stopped?'已停止查找':noResults?'未找到资源':'已完成任务'} <span><img src={resultAssets.imgArrowChevronRight} alt="" style={{rotate:expanded?"90deg":"0deg"}}/></span></button>}
+  {!complete&&!resultReady&&!stopped&&<div className="ask-running-status"><span>正在查找</span><button onClick={()=>{setStopped(true);setComplete(true);setExpanded(false);setResultReady(false)}}>停止查找</button></div>}
   <div className="ask-flow"><div className="ask-process-collapse"><div className="ask-process" data-node-id="37:8341">
-   <div className="ask-progress-heading"><p>{stage===0?'准备中':stage===4?(noResults?'查找已结束':'资源信息已整理'):'正在整理资源信息'}</p></div>
-   {[{check:'37:8350',text:'37:8354',status:'37:8356',label:'理解需求',image:assets.img1},{check:'37:8360',text:'37:8363',status:'37:8365',label:'整理候选资源',image:assets.imgFrame2119903382},{check:'37:8369',text:'37:8372',status:'37:8374',label:noResults?'整理查找结果':'汇总文件信息',image:assets.img2}].slice(0,Math.min(stage,3)).map((step,index)=><div key={step.text} className={"ask-step "+(stage>index+1?"step-done":"step-active")}><div className="ask-step-title"><span data-node-id={step.check}>{stage>index+1?<img src={step.image} alt="完成"/>:<i className="thinking-spinner" aria-label="处理中"/>}</span><p data-node-id={step.text}>{step.label}</p></div><p className="ask-step-status" data-node-id={step.status}>{stage>index+1?'已完成':'处理中…'}</p></div>)}
-   {stage===4&&<div className="ask-summary"><p data-node-id="37:8378">{noResults?'暂未找到匹配的资源，可以换个关键词再试试':'资源列表已整理，可查看文件或比较资源'}</p><p className="ask-step-status" data-node-id="37:8380">已完成</p></div>}
+   <div className="ask-progress-heading"><p>{stopped?'查找已停止':stage===0?'准备中':stage===4?(noResults?'查找已结束':'资源信息已整理'):'正在整理资源信息'}</p></div>
+   {[{check:'37:8350',text:'37:8354',status:'37:8356',label:'理解需求',image:assets.img1},{check:'37:8360',text:'37:8363',status:'37:8365',label:'整理候选资源',image:assets.imgFrame2119903382},{check:'37:8369',text:'37:8372',status:'37:8374',label:noResults?'整理查找结果':'汇总文件信息',image:assets.img2}].slice(0,Math.min(stage,3)).map((step,index)=><div key={step.text} className={"ask-step "+(stage>index+1?"step-done":stopped?"step-stopped":"step-active")}><div className="ask-step-title"><span data-node-id={step.check}>{stage>index+1?<img src={step.image} alt="完成"/>:stopped?<span className="thinking-stopped">·</span>:<i className="thinking-spinner" aria-label="处理中"/>}</span><p data-node-id={step.text}>{step.label}</p></div><p className="ask-step-status" data-node-id={step.status}>{stage>index+1?'已完成':stopped?'已停止':'处理中…'}</p></div>)}
+   {stage===4&&!stopped&&<div className="ask-summary"><p data-node-id="37:8378">{noResults?'暂未找到匹配的资源，可以换个关键词再试试':'资源列表已整理，可查看文件或比较资源'}</p><p className="ask-step-status" data-node-id="37:8380">已完成</p></div>}
   </div>
   </div>
-  {resultReady&&noResults&&<section className="ask-empty" aria-label="没有搜索结果"><h2>暂时没找到相关资源</h2><p>试试更准确的名称，或加上资源类型，例如“片名＋电影”“书名＋有声书”。</p><div><button onClick={()=>onEdit(question)}>修改关键词</button><button onClick={onRetry}>重新搜索</button></div></section>}
-  {resultReady&&!noResults&&<div className="ask-results" data-node-id="37:8381">
+  {stopped&&<section className="ask-empty" aria-label="查找已停止"><h2>已停止本次查找</h2><p>可以修改关键词，或重新开始查找。</p><div><button onClick={()=>onEdit(question)}>修改关键词</button><button onClick={onRetry}>重新查找</button></div></section>}
+  {resultReady&&!stopped&&noResults&&<section className="ask-empty" aria-label="没有搜索结果"><h2>暂时没找到相关资源</h2><p>试试更准确的名称，或加上资源类型，例如“片名＋电影”“书名＋有声书”。</p><div><button onClick={()=>onEdit(question)}>修改关键词</button><button onClick={onRetry}>重新搜索</button></div></section>}
+  {resultReady&&!stopped&&!noResults&&<div className="ask-results" data-node-id="37:8381">
    <div className="ask-best"><h2>推荐资源</h2><div className="ask-file"><div className="ask-folder"><img src={result.type==='视频'?'./assets/results-folder.svg':'./assets/resource-'+(result.icon||'link')+'.svg'} alt={result.type+"资源"}/></div><div><p>{result.title}</p><div className="ask-meta">{matchConditions.map(tag=><span key={tag}>{tag}</span>)}</div></div></div><p className="ask-match-reason"><span>本次匹配条件</span>{matchDescription}</p><div className="ask-actions"><button onClick={()=>setDetails(true)}>查看文件</button><button onClick={()=>setPicker(true)}>{saved?'已保存':'保存云盘'}</button></div></div>
    <button className="ask-all" onClick={onShowAll}><span>查看全部资源<img src={assets.img2025IcCommonPagerNextNormal48} alt=""/></span><small>比较不同版本与来源</small></button>
   </div>}
