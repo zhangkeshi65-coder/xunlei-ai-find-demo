@@ -18,6 +18,8 @@ export default function AskConversation({question,onRestart,onEdit,onRetry,initi
  const root=React.useRef<HTMLDivElement>(null);
  const cloud=useCloudData();
  const saved=cloud.files.some(file=>file.name===result.title);
+ const userMessage=React.useRef<HTMLDivElement>(null);
+ const resourceScroll=React.useRef(0);
  const [saveNotice,setSaveNotice]=React.useState('');
  const [picker,setPicker]=React.useState(false);
  const [complete,setComplete]=React.useState(initiallyComplete);
@@ -40,10 +42,16 @@ export default function AskConversation({question,onRestart,onEdit,onRetry,initi
   ];
   return ()=>timers.forEach(clearTimeout);
  },[question,reduced,stopped]);
- if(showAll&&!noResults&&!stopped)return <ResourceList question={question}/>;
+ React.useLayoutEffect(()=>{
+  const message=userMessage.current,container=root.current;if(!message||!container)return;
+  const measure=()=>container.style.setProperty('--ask-message-extra',Math.max(0,message.offsetHeight-38)+'px');
+  measure();const observer=new ResizeObserver(measure);observer.observe(message);return()=>observer.disconnect();
+ },[question,showAll]);
+ React.useEffect(()=>{if(!saveNotice)return;const timer=window.setTimeout(()=>setSaveNotice(''),3000);return()=>clearTimeout(timer)},[saveNotice]);
+ if(showAll&&!noResults&&!stopped)return <ResourceList question={question} scrollPosition={resourceScroll}/>;
  return <div ref={root} className={"ask-conversation "+(complete?"ask-complete ":"")+(expanded?"ask-expanded":"")} data-node-id="37:8297">
   <div className="ask-time">13:56</div>
-  <div className="ask-user"><p data-node-id="37:8303">{question}</p><div className="ask-user-avatar"><img data-node-id="37:8305" src={assets.imgImage336} alt="用户头像"/></div></div>
+  <div ref={userMessage} className="ask-user"><p data-node-id="37:8303">{question}</p><div className="ask-user-avatar"><img data-node-id="37:8305" src={assets.imgImage336} alt="用户头像"/></div></div>
   <div className="ask-ai-avatar" data-node-id="37:8309"><img src={assets.img} alt="迅雷AI"/></div>
   {complete&&<button className="ask-completed-toggle" aria-expanded={expanded} onClick={()=>setExpanded(e=>!e)}>{stopped?'已停止查找':noResults?'未找到资源':'已完成任务'} <span><img src={resultAssets.imgArrowChevronRight} alt="" style={{rotate:expanded?"90deg":"0deg"}}/></span></button>}
   {!complete&&!resultReady&&!stopped&&<div className="ask-running-status"><span>正在查找</span><button onClick={()=>{setStopped(true);setComplete(true);setExpanded(false);setResultReady(false)}}>停止查找</button></div>}

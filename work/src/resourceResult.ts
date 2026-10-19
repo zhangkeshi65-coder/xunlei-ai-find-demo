@@ -4,13 +4,14 @@ function classifyResource(question:string):ResourceResult{
  const quoted=q.match(/[《「“"]([^》」”"]+)[》」”"]/);
  const subject=quoted?.[1]||q.replace(/^(?:请|麻烦)?(?:帮我|给我|我要|我想)?(?:找一下|找一找|查找|搜索|找|搜)/,'').replace(/^(一部|一套|一个|一些)/,'').trim()||'相关资源';
  const title=quoted?`《${subject}》`:subject;
- if(/\.(?:rmvb|mp4|mkv|avi|mov|wmv)\b|视频/i.test(q))return {title,type:'视频',tags:[]};
+ if(/\b(?:rmvb|mp4|mkv|avi|mov|wmv)\b|视频/i.test(q))return {title,type:'视频',tags:[]};
  if(/https?:\/\/|www\.|网址|网站|网页|链接|HTML/i.test(q))return {title:subject,type:'网址',tags:['网页链接','可保存'],icon:'web'};
- if(/资料包|压缩包|资源包|合集包|ZIP|RAR|7z/i.test(q))return {title,type:'资料包',tags:['资料包','压缩文件'],icon:'zip'};
  if(/有声|音频|听书|播客|mp3|flac|wav|m4a/i.test(q))return {title:/有声|听书/.test(q)?title.replace(/有声书$/,'')+'有声书':title,type:'音频',icon:'link',tags:/被讨厌的勇气/.test(q)?['全55集','内存小']:['有声书','音频资源']};
- if(/PDF|EPUB|MOBI|AZW3|DOCX?|PPTX?|XLSX?|电子书|学习|资料|练习|文档|书籍/i.test(q))return {title:/PDF/i.test(q)?title:title.replace(/电子书$/,'')+'电子书与资料',type:'文档',icon:'pdf',tags:[/PDF/i.test(q)?'PDF':'学习资料','文档资源']};
- if(/游戏|刺客信条|安装包/i.test(q))return {title:/游戏/.test(title)?title:title+'游戏资源',type:'游戏',tags:['安装包','游戏资源']};
- if(/电影|蓝光|4K|奥本海默|流浪地球/i.test(q))return {title,type:'视频',tags:[/4K/i.test(q)?'4K':'高清','电影资源']};
+ if(/游戏|刺客信条|安装包/.test(q)&&/资料包|压缩包|资源包|合集包|ZIP|RAR|7z/i.test(q))return {title:/游戏/.test(title)?title:title+'游戏资源',type:'游戏',tags:['安装包','游戏资源'],icon:'zip'};
+ if(/资料包|压缩包|资源包|合集包|ZIP|RAR|7z/i.test(q))return {title,type:'资料包',tags:['资料包','压缩文件'],icon:'zip'};
+ if(/PDF|EPUB|MOBI|AZW3|DOCX?|PPTX?|XLSX?|电子书|学习|资料|练习|文档|书籍/i.test(q))return {title,type:'文档',icon:'pdf',tags:[/PDF/i.test(q)?'PDF':'学习资料','文档资源']};
+ if(/游戏|刺客信条|安装包/i.test(q))return {title:/游戏/.test(title)?title:title+'游戏资源',type:'游戏',tags:['安装包','游戏资源'],icon:'zip'};
+ if(/电影|蓝光|4K|2160P|1080P|720P|奥本海默|流浪地球/i.test(q))return {title,type:'视频',tags:[/4K/i.test(q)?'4K':'高清','电影资源']};
  if(/电视剧|全集|甄嬛传|漫长的季节|黑暗荣耀/i.test(q))return {title:title.replace(/高清全集|全集$/,'')+'全集',type:'视频',tags:['全集','视频资源']};
  return {title,type:'文件',tags:['相关资源','可保存']};
 }

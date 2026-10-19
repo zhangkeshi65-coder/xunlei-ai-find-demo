@@ -6,11 +6,13 @@ import {resourceFiles} from './resourceFiles';
 import assets from './filePageAssets';
 import selectionAssets from './selectionAssets';
 import {saveFeedback} from './cloudStore';
+import useCloudData from './useCloudData';
 export default function FileBrowser({question,onBack}:{question:string,onBack:()=>void}){
  const result=resourceResult(question);
  const kind=result.type==='视频'?'视频':result.type==='音频'?'音频':result.type==='文档'?'文档':'文件';
  const[tab,setTab]=React.useState('全部'),[selecting,setSelecting]=React.useState(false),[selected,setSelected]=React.useState<number[]>([]),[saving,setSaving]=React.useState<string[]|null>(null),[notice,setNotice]=React.useState('');
  const files=resourceFiles(question,result);
+ const cloud=useCloudData();
  const exitSelection=()=>{setSelecting(false);setSelected([])};
  const toggle=(i:number)=>setSelected(s=>s.includes(i)?s.filter(x=>x!==i):[...s,i]);
  React.useEffect(()=>{const handler=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!saving){if(selecting)exitSelection();else onBack()}};window.addEventListener('keydown',handler);return()=>window.removeEventListener('keydown',handler)},[onBack,saving,selecting]);
@@ -22,7 +24,7 @@ export default function FileBrowser({question,onBack}:{question:string,onBack:()
   <div className="file-browser-list" style={{bottom:100}}>{files.map((file,i)=><div className="file-browser-row" key={i} onClick={selecting?()=>toggle(i):undefined}>
 
    <div className="file-browser-icon">{result.type==='视频'?<img className="file-video-icon" src={selecting?selectionAssets.img40:"./assets/44de1c2e-ba2b-47f5-943e-8f8230abab1c.svg"} alt="视频文件"/>:<img className="file-other-icon" src={'./assets/resource-'+(result.icon||'link')+'.svg'} alt={kind+'文件'}/>}</div>
-   <div className="file-browser-copy"><p>{file.name}</p><div><span>2024/09/23 18:23</span>{selecting&&<img className="file-meta-divider" src={selectionAssets.imgVector1918} alt=""/>}<span>{file.size}</span>{!selecting&&<button onClick={()=>setSaving([file.name])}>转存</button>}</div></div>
+   <div className="file-browser-copy"><p>{file.name}</p><div><span>2024/09/23 18:23</span>{selecting&&<img className="file-meta-divider" src={selectionAssets.imgVector1918} alt=""/>}<span>{file.size}</span>{!selecting&&<button onClick={()=>setSaving([file.name])}>{cloud.files.some(saved=>saved.name===file.name)?'已保存':'转存'}</button>}</div></div>
    {selecting&&<button className="file-row-selector" role="checkbox" aria-checked={selected.includes(i)} aria-label={'选择'+file.name+'第'+(i+1)+'项'} onClick={e=>{e.stopPropagation();toggle(i)}}><img src={selected.includes(i)?selectionAssets.img2025IcSelectorChecked24:selectionAssets.img2025IcSelectorUnchecked24} alt=""/></button>}
   </div>)}</div>
 

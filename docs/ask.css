@@ -86,3 +86,8 @@
 .ask-running-status{position:absolute;top:113px;left:58px;height:36px;display:flex;align-items:center;gap:12px;font-size:12px;line-height:18px;color:#8e8f93}.find-screen .ask-running-status button{padding:4px 8px;border-radius:6px;background:#f2f5fa;color:#545b67;font-size:11px;line-height:18px}.thinking-stopped{font-size:20px;line-height:14px;color:#8e8f93}
 
 .history-panel{display:flex;flex-direction:column}.history-panel header,.history-panel>input{flex-shrink:0}.history-list{height:auto;flex:1;min-height:0}.history-empty{margin:36px 0;color:#8e8f93;font-size:14px;line-height:22px;text-align:center}
+
+/* Wrapped requests leave room for the response and every tag. */
+.ask-ai-avatar,.ask-running-status,.find-screen .ask-completed-toggle{top:calc(113px + var(--ask-message-extra,0px))}.ask-flow{top:calc(164px + var(--ask-message-extra,0px))}.ask-file{height:auto;min-height:40px}.ask-meta{flex-wrap:wrap;white-space:normal}.ask-meta span{white-space:nowrap}.file-browser-notice{white-space:normal;text-align:center;overflow-wrap:anywhere}.folder-picker .folder-entry{height:auto;min-height:65px}.folder-entry>span{min-width:0;overflow-wrap:anywhere}.folder-resource-summary span{overflow-wrap:anywhere}
+
+.find-screen .folder-picker .folder-confirm:disabled{opacity:.45;cursor:default}
