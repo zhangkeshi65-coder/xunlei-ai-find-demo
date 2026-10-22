@@ -14,8 +14,7 @@ export type SearchControl={stop:()=>void};
 export default function AskConversation({question,onRestart,onEdit,onRetry,initiallyComplete=false,showAll=false,onShowAll,controlRef,onRunningChange}:{question:string,onRestart:()=>void,onEdit:(question:string)=>void,onRetry:()=>void,initiallyComplete?:boolean,showAll?:boolean,onShowAll:()=>void,controlRef:React.Ref<SearchControl>,onRunningChange:(running:boolean)=>void}){
  const result=resourceResult(question);
  const noResults=hasNoSearchResults(question);
- const matchConditions=result.tags.filter(tag=>tag!=='最匹配');
- const matchDescription=result.type==='文件'&&matchConditions.length===1?'按资源名称查找':matchConditions.join(' · ');
+ const resourceTags=result.tags.filter(tag=>tag!=='最匹配');
  const root=React.useRef<HTMLDivElement>(null);
  const cloud=useCloudData();
  const saved=cloud.files.some(file=>file.name===result.title);
@@ -72,7 +71,7 @@ export default function AskConversation({question,onRestart,onEdit,onRetry,initi
   {stopped&&<section className="ask-empty" aria-label="查找已停止"><h2>已停止本次查找</h2><p>可以修改关键词，或重新开始查找。</p><div><button onClick={()=>onEdit(question)}>修改关键词</button><button onClick={onRetry}>重新查找</button></div></section>}
   {resultReady&&!stopped&&noResults&&<section className="ask-empty" aria-label="没有搜索结果"><h2>暂时没找到相关资源</h2><p>试试更准确的名称，或加上资源类型，例如“片名＋电影”“书名＋有声书”。</p><div><button onClick={()=>onEdit(question)}>修改关键词</button><button onClick={onRetry}>重新搜索</button></div></section>}
   {resultReady&&!stopped&&!noResults&&<div className="ask-results" data-node-id="37:8381">
-   <div className="ask-best"><h2>推荐资源</h2><div className="ask-file"><div className="ask-folder"><img src={result.type==='视频'?'./assets/results-folder.svg':'./assets/resource-'+(result.icon||'link')+'.svg'} alt={result.type+"资源"}/></div><div><p>{result.title}</p><div className="ask-meta">{matchConditions.map(tag=><span key={tag}>{tag}</span>)}</div></div></div><p className="ask-match-reason"><span>本次匹配条件</span>{matchDescription}</p><div className="ask-actions"><button onClick={()=>setDetails(true)}>查看文件</button><button onClick={()=>setPicker(true)}>{saved?'已保存':'保存云盘'}</button></div></div>
+   <div className="ask-best"><h2>推荐资源</h2><div className="ask-file"><div className="ask-folder"><img src={result.type==='视频'?'./assets/results-folder.svg':'./assets/resource-'+(result.icon||'link')+'.svg'} alt={result.type+"资源"}/></div><div><p>{result.title}</p><div className="ask-meta">{resourceTags.map(tag=><span key={tag}>{tag}</span>)}</div></div></div><div className="ask-actions"><button onClick={()=>setDetails(true)}>查看文件</button><button onClick={()=>setPicker(true)}>{saved?'已保存':'保存云盘'}</button></div></div>
    <button className="ask-all" onClick={onShowAll}><span>查看全部资源<img src={assets.img2025IcCommonPagerNextNormal48} alt=""/></span><small>比较不同版本与来源</small></button>
   </div>}
   </div>
