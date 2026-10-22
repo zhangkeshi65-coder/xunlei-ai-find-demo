@@ -1,6 +1,6 @@
 import React from 'react';
 import {armSaveFailureDemo} from './saveFailureDemo';
-import AskConversation from './AskConversation';
+import AskConversation,{type SearchControl} from './AskConversation';
 import Keyboard from './Keyboard';
 import VoiceMode from './VoiceMode';
 import HistoryPanel,{HISTORY_KEY,HistoryEntry,normalizeHistory} from './HistoryPanel';
@@ -15,6 +15,8 @@ const choices=[
 export default function FindPage({onBack}:{onBack:()=>void}){
  const root=React.useRef<HTMLDivElement>(null);
  const input=React.useRef<HTMLInputElement>(null);
+ const searchControl=React.useRef<SearchControl>(null);
+ const [searchRunning,setSearchRunning]=React.useState(false);
  const introPlayed=React.useRef(false);
  const [allResults,setAllResults]=React.useState(false);
  const [historyOpen,setHistoryOpen]=React.useState(false);
@@ -25,7 +27,7 @@ export default function FindPage({onBack}:{onBack:()=>void}){
  const nativeKeyboard=typeof navigator!=='undefined'&&/iPhone|iPad|Android/i.test(navigator.userAgent);
  const closeKeyboard=()=>{setKeyboard(false);input.current?.blur()};
  const openVoice=()=>{closeKeyboard();setVoice(true)};
- const pressKey=(key:string)=>{if(key==='Enter'){if(message.trim())submit(message);else closeKeyboard()}else if(key==='Backspace')setMessage(m=>Array.from(m).slice(0,-1).join(''));else setMessage(m=>m+key)};
+ const pressKey=(key:string)=>{if(key==='Enter'){if(searchRunning)return;if(message.trim())submit(message);else closeKeyboard()}else if(key==='Backspace')setMessage(m=>Array.from(m).slice(0,-1).join(''));else setMessage(m=>m+key)};
  const [ask,setAsk]=React.useState<HistoryEntry|null>(null);
  const submit=(question:string)=>{if(!question.trim())return;if(question.trim()==='测试保存失败')armSaveFailureDemo();const entry={question:question.trim(),key:Date.now()};setAllResults(false);setAsk(entry);setHistory(previous=>{const next=normalizeHistory([entry,...previous.filter(item=>item.question!==entry.question)]);try{localStorage.setItem(HISTORY_KEY,JSON.stringify(next))}catch{}return next});setMessage('');setKeyboard(false);input.current?.blur()};
  React.useLayoutEffect(()=>{
@@ -49,9 +51,9 @@ export default function FindPage({onBack}:{onBack:()=>void}){
   {!voice&&(!ask?<section className="find-welcome">
    <div className="find-greeting"><div className="find-avatar"><img src={assets.img04SparkGradient1} alt="迅雷AI"/></div><p data-node-id="37:7936" aria-label={GREETING}>{Array.from(GREETING).map((c,i)=><span key={i} className="find-char" aria-hidden="true">{c}</span>)}</p></div>
    <div className="find-choices">{choices.map(c=><button key={c.id} className="find-choice" data-node-id={c.id} onClick={()=>submit(c.query)}><img src={c.image} alt=""/><span>{c.label}</span></button>)}</div>
-  </section>:<AskConversation key={ask.key} question={ask.question} onRestart={()=>setAsk(null)} onEdit={question=>{setMessage(question);requestAnimationFrame(()=>input.current?.focus())}} onRetry={()=>submit(ask.question)} showAll={allResults} onShowAll={()=>setAllResults(true)}/>)}
-  {!voice&&!allResults&&<form className="find-composer" onSubmit={e=>{e.preventDefault();submit(message)}}>
-   <div className="find-input"><button type="button" aria-label="语音输入" onPointerDown={e=>e.preventDefault()} onClick={openVoice}><img src={assets.imgMessageVoice} alt=""/></button><input ref={input} aria-label="发消息" onFocus={()=>{if(!nativeKeyboard)setKeyboard(true)}} onKeyDown={e=>{if(e.key==='Escape')closeKeyboard()}} placeholder="发消息…" value={message} onChange={e=>setMessage(e.target.value)}/><button type="button" aria-label="表情" onClick={()=>setMessage(m=>m+'😊')}><img src={assets.imgMessageExpression} alt=""/></button><button type={message.trim()?"submit":"button"} aria-label={message.trim()?"发送询问":"添加"} onClick={()=>{if(!message.trim())input.current?.focus()}}><img src={assets.imgAddCircle} alt=""/></button></div>
+  </section>:<AskConversation key={ask.key} question={ask.question} controlRef={searchControl} onRunningChange={setSearchRunning} onRestart={()=>setAsk(null)} onEdit={question=>{setMessage(question);requestAnimationFrame(()=>input.current?.focus())}} onRetry={()=>submit(ask.question)} showAll={allResults} onShowAll={()=>setAllResults(true)}/>)}
+  {!voice&&!allResults&&<form className="find-composer" onSubmit={e=>{e.preventDefault();if(!searchRunning)submit(message)}}>
+   <div className="find-input"><button type="button" aria-label="语音输入" onPointerDown={e=>e.preventDefault()} onClick={openVoice}><img src={assets.imgMessageVoice} alt=""/></button><input ref={input} aria-label="发消息" onFocus={()=>{if(!nativeKeyboard)setKeyboard(true)}} onKeyDown={e=>{if(e.key==='Escape')closeKeyboard()}} placeholder="发消息…" value={message} onChange={e=>setMessage(e.target.value)}/><button type="button" aria-label="表情" onClick={()=>setMessage(m=>m+'😊')}><img src={assets.imgMessageExpression} alt=""/></button><button type={searchRunning?"button":message.trim()?"submit":"button"} aria-label={searchRunning?"停止查找":message.trim()?"发送询问":"添加"} title={searchRunning?"停止查找":undefined} onPointerDown={e=>{if(searchRunning)e.preventDefault()}} onClick={()=>{if(searchRunning)searchControl.current?.stop();else if(!message.trim())input.current?.focus()}}>{searchRunning?<svg className="find-stop-icon" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="10.5" fill="none" stroke="currentColor" strokeWidth="1.7"/><rect x="9.5" y="9.5" width="9" height="9" rx="1.4" fill="currentColor"/></svg>:<img src={assets.imgAddCircle} alt=""/>}</button></div>
   </form>}
   {keyboard&&!voice&&<Keyboard onKey={pressKey} onClose={closeKeyboard}/>}
   {voice&&<VoiceMode onClose={()=>setVoice(false)}/>}
